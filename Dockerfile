@@ -12,7 +12,9 @@ RUN apt-get update
 # install the nginx server with PHP
 RUN apt-get install -y \
     git make curl \
-    nginx-light php5-fpm php5-odbc php5-curl \
+    nginx-light \
+    php5=5.6.7+dfsg-1 php5-fpm=5.6.7+dfsg-1 php5-common=5.6.7+dfsg-1 php5-cli=5.6.7+dfsg-1 \
+    php5-odbc=5.6.7+dfsg-1 php5-curl=5.6.7+dfsg-1 \
     unixodbc
 
 # Add virtuoso odbc dependency for OntoWiki to me able to connecto to virtuoso

@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM ubuntu:14.04
 
 MAINTAINER Natanael Arndt <arndt@informatik.uni-leipzig.de>
 

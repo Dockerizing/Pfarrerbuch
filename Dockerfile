@@ -17,15 +17,16 @@ RUN apt-get install -y \
     php5-odbc php5-curl \
     unixodbc
 
-# Add virtuoso odbc dependency for OntoWiki to me able to connecto to virtuoso
+# Add virtuoso odbc dependency for OntoWiki to be able to connect to virtuoso
 ADD libvirtodbc0_7.2_amd64.deb /
 RUN dpkg -i libvirtodbc0_7.2_amd64.deb
 
 RUN rm -rf /var/www/*
+RUN curl https://getcomposer.org/composer.phar -o composer.phar
+RUN chmod +x composer.phar
+RUN ./composer.phar create-project --keep-vcs aksw/ontowiki /var/www/ dev-feature/php-composer
+RUN cd /var/www/ && git submodule init && git submodule update
 
-# clone ontowiki and get its dependencies
-RUN git clone https://github.com/AKSW/OntoWiki.git /var/www/
-RUN cd /var/www/ && make deploy
 RUN cp /var/www/config.ini.dist /var/www/config.ini
 
 # configure the ontowiki site for nginx

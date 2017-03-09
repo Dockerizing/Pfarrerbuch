@@ -6,23 +6,26 @@ MAINTAINER Natanael Arndt <arndt@informatik.uni-leipzig.de>
 ENV DEBIAN_FRONTEND noninteractive
 
 # update package index
-RUN apt-get update
+# and install some basic required packages
+RUN apt-get update && \
+    apt-get install -y git make curl php5-cli php5-curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# install some basic packages
-# install the nginx server with PHP
-RUN apt-get install -y \
-    git make curl \
-    php5-cli php5-curl
+# Prepare installations directory
+RUN rm -rf /var/www/* && mkdir -p /var/www/html/
 
-RUN rm -rf /var/www/*
-RUN mkdir -p /var/www/html/
+RUN curl https://getcomposer.org/composer.phar -o composer.phar && \
+    chmod +x composer.phar && \
+    mv composer.phar /usr/bin/composer
+RUN composer create-project --keep-vcs aksw/ontowiki /var/www/html/ dev-develop
 
-RUN curl https://getcomposer.org/composer.phar -o composer.phar
-RUN chmod +x composer.phar
-RUN ./composer.phar create-project --keep-vcs aksw/ontowiki /var/www/html/ dev-develop
-RUN cd /var/www/html/ && git submodule init && git submodule update
+WORKDIR /var/www/html/
 
-RUN cp /var/www/html/config.ini.dist /var/www/html/config.ini
+# this is only required for RDFauthor at the moment
+RUN git submodule init && \
+    git submodule update
+
+RUN cp config.ini.dist config.ini
 
 # Add startscript and start
 ADD start.sh /start.sh

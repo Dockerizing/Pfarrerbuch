@@ -1,9 +1,12 @@
 FROM debian:jessie
 
-MAINTAINER Natanael Arndt <arndt@informatik.uni-leipzig.de>
+LABEL maintainer="Natanael Arndt <arndt@informatik.uni-leipzig.de>"
 
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND noninteractive
+
+# OntoWiki Site Extension configuration
+ENV OW_SITE_MODEL "http://pfarrerbuch.aksw.org/"
 
 # update package index
 # and install some basic required packages
@@ -14,16 +17,11 @@ RUN apt-get update && \
 # Prepare installations directory
 RUN rm -rf /var/www/* && mkdir -p /var/www/html/
 
-RUN curl https://getcomposer.org/composer.phar -o composer.phar && \
-    chmod +x composer.phar && \
-    mv composer.phar /usr/bin/composer
-RUN composer create-project --keep-vcs aksw/ontowiki /var/www/html/ dev-develop
+# clone ontowiki and get its dependencies
+RUN git clone https://github.com/AKSW/pfarrerbuch.de.git /var/www/html/
+RUN cd /var/www/html/ && make deploy && make custom
 
 WORKDIR /var/www/html/
-
-# this is only required for RDFauthor at the moment
-RUN git submodule init && \
-    git submodule update
 
 RUN cp config.ini.dist config.ini
 

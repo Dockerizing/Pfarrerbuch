@@ -6,7 +6,7 @@ LABEL maintainer="Natanael Arndt <arndt@informatik.uni-leipzig.de>"
 ENV DEBIAN_FRONTEND noninteractive
 
 # OntoWiki Site Extension configuration
-ENV OW_SITE_MODEL "http://pfarrerbuch.aksw.org/"
+ENV OW_SITE_MODEL "https://pfarrerbuch.aksw.org/"
 
 # update package index
 # and install some basic required packages

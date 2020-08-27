@@ -30,7 +30,6 @@ fi
 
 cat ${SITE_CONFFILE}
 
-
 echo "OntoWiki is ready to set sail!"
 cat /ow-docker.fig
 echo ""
